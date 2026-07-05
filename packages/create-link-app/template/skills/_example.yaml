@@ -1,0 +1,33 @@
+# ⚡ 工作流配置模板
+#
+# 将本文件复制为 skills/your-skill-name.yaml，修改参数即可。
+# LINK 启动时自动加载 skills/*.yaml，重启后生效。
+#
+# 工作流 = 多个工具的编排组合，前一个步骤的结果可传给后一步。
+
+# ─── 简单工作流示例 ───
+# name: daily_digest
+# description: 抓取 RSS → 生成摘要 → 保存笔记
+# steps:
+#   - tool: fetch_rss
+#     params:
+#       feedUrl: "https://example.com/rss"
+#   - tool: summarize
+#     params:
+#       text: "{{steps.step_0.result}}"
+#   - tool: write_file
+#     params:
+#       path: "./notes/{{date}}.md"
+#       content: "{{steps.step_1.result}}"
+
+# ─── 引用上一步结果 ───
+# 用 {{steps.步骤ID.result}} 引用前一步的输出
+# 步骤ID 默认为 step_0, step_1, step_2...
+# 也可以在 steps 中加 name 字段自定义引用名称:
+#   - tool: fetch_rss
+#     name: fetch
+#     params:
+#       feedUrl: "..."
+#   - tool: summarize
+#     params:
+#       text: "{{steps.fetch.result}}"

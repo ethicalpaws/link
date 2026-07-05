@@ -1,0 +1,11 @@
+name: knowledge_search
+description: 知识搜索 — 搜索知识库并将结果保存为笔记
+steps:
+  - tool: search_knowledge
+    name: search
+    params:
+      query: "{{query}}"
+  - tool: write_file
+    params:
+      path: "./search-{{query}}.md"
+      content: "# 搜索结果: {{query}}\n\n{{steps.search.result}}"

@@ -1,0 +1,9 @@
+{
+  "name": "create-link-app",
+  "version": "0.1.0",
+  "description": "CLI 脚手架 — 一键创建你的 LINK 系统",
+  "bin": {
+    "create-link-app": "./index.js"
+  },
+  "license": "MIT"
+}

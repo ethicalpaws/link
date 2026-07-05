@@ -1,0 +1,10 @@
+{
+  "name": "@link/registry",
+  "version": "0.1.0",
+  "description": "LINK Registry - ToolRegistry, SkillRegistry, YAML loader, community package scanner",
+  "main": "index.js",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "license": "MIT"
+}

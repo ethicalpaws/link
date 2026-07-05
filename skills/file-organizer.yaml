@@ -1,0 +1,11 @@
+name: file_organizer
+description: 文件整理 — 列出目录内容并生成索引文件
+steps:
+  - tool: list_dir
+    name: list
+    params:
+      path: "{{dir}}"
+  - tool: write_file
+    params:
+      path: "./{{dir}}-index.md"
+      content: "# {{dir}} 文件索引\n\n{{steps.list.result}}"

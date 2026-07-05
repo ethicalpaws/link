@@ -1,0 +1,227 @@
+<svg viewBox="0 0 1100 1540" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" style="background:#0d0d1a">
+  <defs>
+    <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0006"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4455aa"/></marker>
+    <marker id="arrowDash" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5577bb" opacity=".5"/></marker>
+  </defs>
+
+  <rect width="1100" height="1540" rx="16" fill="#0d0d1a" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="550" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#8899ee" letter-spacing="2">🔗 LINK 系统架构图</text>
+  <text x="550" y="56" text-anchor="middle" font-size="11" fill="#555">Long-term Intelligent Navigation Keystone — v0.1.0</text>
+
+  <!-- L1: Config Layer -->
+  <rect x="30" y="75" width="1040" height="95" rx="10" fill="none" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="50" y="95" font-size="10" fill="#555" transform="rotate(-90 35 85)">层</text>
+  <rect x="80" y="82" width="310" height="78" rx="8" fill="#0d0d1a" stroke="#333" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="100" y="106" font-size="13" font-weight="600" fill="#7788cc">⚙️ 配置层</text>
+  <text x="100" y="126" font-size="11" fill="#666">link.config.js — 用户配置</text>
+  <text x="100" y="144" font-size="11" fill="#666">data/*.json — 运行时持久化</text>
+  <rect x="420" y="82" width="300" height="78" rx="8" fill="#0d0d1a" stroke="#333" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="440" y="106" font-size="13" font-weight="600" fill="#7788cc">📝 Agent 身份定义</text>
+  <text x="440" y="126" font-size="11" fill="#666">agents/{id}/SOUL.md · AGENTS.md</text>
+  <text x="440" y="144" font-size="11" fill="#666">TOOLS.md · USER.md</text>
+  <rect x="750" y="82" width="300" height="78" rx="8" fill="#0d0d1a" stroke="#333" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="770" y="106" font-size="13" font-weight="600" fill="#7788cc">🔧 扩展定义</text>
+  <text x="770" y="126" font-size="11" fill="#666">tools/*.yaml — 自定义工具</text>
+  <text x="770" y="144" font-size="11" fill="#666">@link/skill-* — 社区包（可选）</text>
+
+  <line x1="390" y1="120" x2="415" y2="120" stroke="#4455aa" stroke-width="1" marker-end="url(#arrow)" opacity=".6"/>
+  <line x1="550" y1="160" x2="550" y2="168" stroke="#4455aa" stroke-width="1" opacity=".6"/>
+
+  <!-- Bootstrap -->
+  <rect x="420" y="170" width="260" height="34" rx="17" fill="#111" stroke="#4455aa" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="550" y="192" text-anchor="middle" font-size="13" font-weight="600" fill="#aabbee">🚀 bin/link — 启动入口</text>
+  <line x1="550" y1="204" x2="550" y2="228" stroke="#4455aa" stroke-width="2" marker-end="url(#arrow)" opacity=".8"/>
+
+  <!-- L2: Gateway -->
+  <rect x="30" y="232" width="1040" height="165" rx="10" fill="none" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="50" y="252" font-size="10" fill="#555" transform="rotate(-90 35 242)">层</text>
+  <rect x="80" y="244" width="980" height="142" rx="8" fill="#121" stroke="#3344aa" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="100" y="266" font-size="13" font-weight="600" fill="#8899ee">🗺️ 网关层 @link/gateway</text>
+  <text x="100" y="282" font-size="11" fill="#667">Express HTTP 服务器 (port 3000) · SSE 事件推送 · 工具调用引擎</text>
+
+  <rect x="95" y="294" width="140" height="28" rx="5" fill="#0a0a18" stroke="#222" stroke-width="1"/>
+  <text x="110" y="313" font-size="10" fill="#99a">💬 chat / stream</text>
+  <rect x="247" y="294" width="140" height="28" rx="5" fill="#0a0a18" stroke="#222" stroke-width="1"/>
+  <text x="262" y="313" font-size="10" fill="#99a">📋 rooms / agents</text>
+  <rect x="399" y="294" width="160" height="28" rx="5" fill="#0a0a18" stroke="#222" stroke-width="1"/>
+  <text x="415" y="313" font-size="10" fill="#99a">⚙️ admin · memory</text>
+  <rect x="571" y="294" width="140" height="28" rx="5" fill="#0a0a18" stroke="#222" stroke-width="1"/>
+  <text x="585" y="313" font-size="10" fill="#99a">📚 knowledge</text>
+  <rect x="723" y="294" width="140" height="28" rx="5" fill="#0a0a18" stroke="#222" stroke-width="1"/>
+  <text x="738" y="313" font-size="10" fill="#99a">📡 SSE /api/events</text>
+
+  <rect x="95" y="332" width="155" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="105" y="347" font-size="9" fill="#678">chat-service  @路由</text>
+  <rect x="260" y="332" width="155" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="270" y="347" font-size="9" fill="#678">room-manager 持久化</text>
+  <rect x="425" y="332" width="155" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="435" y="347" font-size="9" fill="#678">sse-bus 广播/重连</text>
+  <rect x="590" y="332" width="155" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="600" y="347" font-size="9" fill="#678">scheduler 定时</text>
+  <rect x="755" y="332" width="155" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="765" y="347" font-size="9" fill="#678">tool-runner 工具循环</text>
+
+  <rect x="95" y="358" width="155" height="20" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="105" y="372" font-size="9" fill="#567">builtin-tools</text>
+  <text x="195" y="372" font-size="9" fill="#456">read_file / write_file / list_dir</text>
+
+  <line x1="300" y1="397" x2="300" y2="425" stroke="#4455aa" stroke-width="2" marker-end="url(#arrow)" opacity=".8"/>
+  <line x1="300" y1="415" x2="550" y2="415" stroke="#4455aa" stroke-width="1.5" opacity=".5"/>
+  <line x1="550" y1="415" x2="550" y2="445" stroke="#4455aa" stroke-width="2" marker-end="url(#arrow)" opacity=".8"/>
+  <text x="420" y="412" text-anchor="middle" font-size="9" fill="#4455aa">callWithTools(agentId, messages, tools)</text>
+
+  <!-- L3: Runtime -->
+  <rect x="30" y="448" width="1040" height="340" rx="10" fill="none" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="50" y="468" font-size="10" fill="#555" transform="rotate(-90 35 458)">层</text>
+
+  <!-- Registry -->
+  <rect x="80" y="460" width="310" height="316" rx="8" fill="#121" stroke="#6a5" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="100" y="482" font-size="13" font-weight="600" fill="#8c6">🔌 注册中心 @link/registry</text>
+  <line x1="95" y1="494" x2="375" y2="494" stroke="#1e1e3a" stroke-width="1"/>
+  <rect x="95" y="504" width="280" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="105" y="519" font-size="10" fill="#aaa">tool-registry.js — Map 注册表</text>
+  <rect x="95" y="532" width="280" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="105" y="547" font-size="10" fill="#aaa">skill-registry.js — 多步骤工作流</text>
+  <rect x="95" y="560" width="280" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="105" y="575" font-size="10" fill="#aaa">yaml-loader.js — YAML → Tool</text>
+  <rect x="95" y="588" width="280" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="105" y="603" font-size="10" fill="#aaa">package-scanner.js — 社区包扫描</text>
+  <rect x="95" y="616" width="280" height="22" rx="4" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="105" y="631" font-size="10" fill="#aaa">link-skill.js — SDK 基类</text>
+  <line x1="95" y1="648" x2="375" y2="648" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="100" y="666" font-size="10" fill="#888">⚡ 执行器:</text>
+  <rect x="100" y="676" width="80" height="22" rx="4" fill="#1a2a1a" stroke="#333" stroke-width="1"/>
+  <text x="116" y="691" font-size="9" fill="#9a7">command</text>
+  <rect x="190" y="676" width="80" height="22" rx="4" fill="#1a2a1a" stroke="#333" stroke-width="1"/>
+  <text x="210" y="691" font-size="9" fill="#9a7">http</text>
+  <rect x="280" y="676" width="80" height="22" rx="4" fill="#1a2a1a" stroke="#333" stroke-width="1"/>
+  <text x="300" y="691" font-size="9" fill="#9a7">ssh</text>
+  <text x="100" y="720" font-size="10" fill="#666">安全防护：</text>
+  <text x="100" y="738" font-size="10" fill="#88a">✅ command/ssh 注入防护</text>
+  <text x="100" y="754" font-size="10" fill="#88a">✅ HTTP SSRF 防护</text>
+  <text x="100" y="770" font-size="10" fill="#88a">✅ 路径白名单校验</text>
+
+  <!-- Memory -->
+  <rect x="410" y="460" width="310" height="200" rx="8" fill="#121" stroke="#a84" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="430" y="482" font-size="13" font-weight="600" fill="#ca6">📅 记忆系统 @link/memory</text>
+  <line x1="425" y1="494" x2="705" y2="494" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="430" y="512" font-size="10" fill="#888">storage.js</text>
+  <text x="430" y="528" font-size="10" fill="#aaa">日摘要 · 周摘要 · 里程碑 · 归档</text>
+  <text x="430" y="544" font-size="10" fill="#aaa">文件系统存储 · ISO 8601 周编号</text>
+  <text x="430" y="564" font-size="10" fill="#888">pipeline.js — 压缩管道</text>
+  <text x="440" y="582" font-size="10" fill="#8a7">日摘要 (≥3条 → LLM) → 23:55</text>
+  <text x="440" y="598" font-size="10" fill="#8a7">周摘要 (7天 → LLM) → 周日 23:57</text>
+  <text x="440" y="614" font-size="10" fill="#8a7">归档 → 周日 23:58</text>
+  <text x="430" y="636" font-size="10" fill="#888">context.js</text>
+  <text x="430" y="652" font-size="10" fill="#aaa">摘要 + 身份 + 计划 → LLM 注入</text>
+
+  <!-- Knowledge -->
+  <rect x="410" y="670" width="310" height="106" rx="8" fill="#121" stroke="#848" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="430" y="692" font-size="13" font-weight="600" fill="#b6b">📚 知识库 @link/knowledge</text>
+  <line x1="425" y1="704" x2="705" y2="704" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="430" y="722" font-size="10" fill="#888">storage.js — Markdown + frontmatter</text>
+  <text x="430" y="740" font-size="10" fill="#aaa">gray-matter 解析 · 递归目录遍历</text>
+  <text x="430" y="760" font-size="10" fill="#888">indexer.js / search.js</text>
+  <text x="430" y="776" font-size="10" fill="#aaa">权重搜索: 标题×10 / 标签×5 / 描述×3</text>
+
+  <!-- LLM -->
+  <rect x="80" y="680" width="310" height="96" rx="8" fill="#121" stroke="#a44" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="100" y="702" font-size="13" font-weight="600" fill="#c66">🧠 LLM 适配层 @link/llm</text>
+  <line x1="95" y1="714" x2="375" y2="714" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="100" y="732" font-size="10" fill="#888">index.js — 统一入口</text>
+  <text x="100" y="748" font-size="10" fill="#aaa">call() / stream() / healthCheck() / setProvider()</text>
+  <text x="100" y="764" font-size="10" fill="#aaa">primary/fallback 自动切换</text>
+  <rect x="100" y="696" width="120" height="20" rx="3" fill="#1a1a2a" stroke="#333" stroke-width="1" visibility="hidden"/>
+
+  <rect x="410" y="786" width="310" height="50" rx="6" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="430" y="806" font-size="10" fill="#667">LLM 模块内部:</text>
+  <text x="430" y="824" font-size="10" fill="#a55">config.js | client.js | stream.js | health.js | signal.js</text>
+
+  <!-- Provider -->
+  <rect x="80" y="786" width="310" height="50" rx="6" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="100" y="806" font-size="10" fill="#667">适配器:</text>
+  <text x="100" y="824" font-size="10" fill="#a55">openclaw.js</text>
+  <text x="210" y="824" font-size="10" fill="#a55">openai-compat.js</text>
+  <text x="100" y="842" font-size="10" fill="#666">(MiniMax / DeepSeek / OpenAI / 通义千问)</text>
+  <!-- moved outside -->
+
+  <!-- format.js shared -->
+  <rect x="100" y="842" width="280" height="22" rx="4" fill="#1a1a2a" stroke="#333" stroke-width="1"/>
+  <text x="115" y="857" font-size="10" fill="#a66">format.js — 统一请求构建 + 响应解析</text>
+
+  <line x1="400" y1="860" x2="400" y2="878" stroke="#a44" stroke-width="1" marker-end="url(#arrow)" opacity=".4"/>
+  <rect x="310" y="878" width="180" height="26" rx="6" fill="#0a0a18" stroke="#522" stroke-width="1" filter="url(#shadow)"/>
+  <text x="340" y="896" font-size="10" fill="#844">🌐 外部 LLM API</text>
+
+  <!-- L4: Frontend -->
+  <rect x="30" y="920" width="1040" height="150" rx="10" fill="none" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="50" y="940" font-size="10" fill="#555" transform="rotate(-90 35 930)">层</text>
+
+  <rect x="80" y="932" width="480" height="126" rx="8" fill="#121" stroke="#57b" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="100" y="954" font-size="13" font-weight="600" fill="#79d">💬 聊天前端 @link/gateway/public</text>
+  <text x="100" y="974" font-size="10" fill="#888">index.html + app.js + style.css</text>
+  <text x="100" y="992" font-size="10" fill="#aaa">Vanilla JS SPA · SSE 打字机效果</text>
+  <text x="100" y="1010" font-size="10" fill="#aaa">多房间切换 · @提及路由</text>
+  <text x="100" y="1028" font-size="10" fill="#aaa">marked.min.js 渲染</text>
+  <text x="100" y="1046" font-size="10" fill="#666">API: POST /api/chat/stream + EventSource</text>
+
+  <rect x="580" y="932" width="470" height="126" rx="8" fill="#121" stroke="#57b" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="600" y="954" font-size="13" font-weight="600" fill="#79d">⚙️ 管理面板 @link/admin-ui</text>
+  <text x="600" y="974" font-size="10" fill="#888">admin.html + 模块化 JS/CSS</text>
+  <text x="600" y="992" font-size="10" fill="#aaa">无框架 · 模块拆分为 10 个 JS 文件</text>
+  <text x="600" y="1012" font-size="10" fill="#aaa">📊总览 🤖战友 🔧工具 🧠模型</text>
+  <text x="600" y="1028" font-size="10" fill="#aaa">📅成长轨迹 📋计划 ⚡工作流</text>
+  <text x="600" y="1044" font-size="10" fill="#aaa">⏰定时 📚知识库 🪪身份</text>
+  <text x="600" y="1058" font-size="10" fill="#666">API: fetch 调用所有 /api/admin/*</text>
+
+  <line x1="200" y1="397" x2="200" y2="932" stroke="#4455aa" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrowDash)" opacity=".3"/>
+  <text x="60" y="660" font-size="9" fill="#445" transform="rotate(-90 60 660)">REST + SSE</text>
+  <line x1="800" y1="397" x2="800" y2="932" stroke="#4455aa" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrowDash)" opacity=".3"/>
+
+  <!-- Data Flow -->
+  <rect x="30" y="1082" width="1040" height="195" rx="10" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="50" y="1104" font-size="13" font-weight="600" fill="#8899ee">🔄 核心数据流: 用户消息</text>
+
+  <text x="60" y="1132" font-size="11" fill="#888">1. 用户输入</text>
+  <line x1="150" y1="1128" x2="210" y2="1128" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="220" y="1132" font-size="11" fill="#888">POST /api/chat/stream → handleAgents()</text>
+  <line x1="510" y1="1128" x2="570" y2="1128" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="580" y="1132" font-size="11" fill="#888">@提及解析 → 决定回应者</text>
+
+  <text x="60" y="1158" font-size="11" fill="#888">2. 并行执行</text>
+  <line x1="150" y1="1154" x2="210" y2="1154" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="220" y="1158" font-size="11" fill="#888">所有 Agent 同时开始</text>
+  <line x1="410" y1="1154" x2="470" y2="1154" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="480" y="1158" font-size="11" fill="#888">callWithTools() → llm.call()</text>
+
+  <text x="60" y="1184" font-size="11" fill="#888">3. LLM 返回</text>
+  <line x1="150" y1="1180" x2="210" y2="1180" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="220" y="1184" font-size="11" fill="#888">有 tool_calls?</text>
+  <line x1="380" y1="1180" x2="440" y2="1180" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="450" y="1184" font-size="11" fill="#888">串行执行 → 结果塞回 → 再调</text>
+
+  <text x="60" y="1210" font-size="11" fill="#888">4. 纯文本回复</text>
+  <line x1="150" y1="1206" x2="210" y2="1206" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="220" y="1210" font-size="11" fill="#888">SSE 推回前端（全文）</text>
+  <line x1="400" y1="1206" x2="460" y2="1206" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="470" y="1210" font-size="11" fill="#888">appendBatch → rooms.json 持久化</text>
+
+  <text x="60" y="1240" font-size="11" fill="#888">5. 定时任务（独立路径）</text>
+  <line x1="150" y1="1236" x2="210" y2="1236" stroke="#6688cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="220" y="1240" font-size="11" fill="#888">scheduler 每30s tick → 日摘要/周报/归档</text>
+
+  <!-- Legend / Stats -->
+  <rect x="30" y="1290" width="1040" height="135" rx="10" fill="#0a0a18" stroke="#1e1e3a" stroke-width="1"/>
+  <text x="50" y="1312" font-size="13" font-weight="600" fill="#8899ee">📦 项目统计</text>
+
+  <text x="50" y="1336" font-size="10" fill="#888">运行环境: Node.js 22+ · 单进程 · 文件系统持久化 · 无数据库</text>
+  <text x="50" y="1354" font-size="10" fill="#888">npm 依赖: express · marked · js-yaml · gray-matter（仅 4 个）</text>
+  <line x1="50" y1="1366" x2="300" y2="1366" stroke="#1e1e3a" stroke-width="1"/>
+
+  <text x="50" y="1384" font-size="10" fill="#888">🔹 7 个包 · 约 3,700 行后端 · 约 1,000 行前端</text>
+  <text x="50" y="1400" font-size="10" fill="#888">🔹 安全防护: 路径白名单 · 命令注入防护 · SSRF 防护 · XSS 转义 · 默认认证</text>
+  <text x="50" y="1416" font-size="10" fill="#888">🔹 agent-runtime 已合并到 gateway/tool-runner</text>
+
+  <text x="550" y="1438" text-anchor="middle" font-size="10" fill="#444">LINK — Long-term Intelligent Navigation Keystone · 2026-07-04</text>
+</svg>

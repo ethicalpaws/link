@@ -1,0 +1,9 @@
+node_modules/
+data/llm-config.json
+data/agents-config.json
+data/rooms.json
+data/daily-summary/
+data/digest/
+.DS_Store
+*.log
+data/schedules-config.json

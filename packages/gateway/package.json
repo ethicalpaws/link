@@ -1,0 +1,11 @@
+{
+  "name": "@link/gateway",
+  "version": "0.1.0",
+  "description": "LINK Gateway - HTTP server with SSE and default chat UI",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.22.0",
+    "marked": "^18.0.5"
+  },
+  "license": "MIT"
+}

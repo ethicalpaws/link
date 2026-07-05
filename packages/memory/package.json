@@ -1,0 +1,7 @@
+{
+  "name": "@link/memory",
+  "version": "0.1.0",
+  "description": "LINK Memory - 4-layer compression, context builder",
+  "main": "index.js",
+  "license": "MIT"
+}
