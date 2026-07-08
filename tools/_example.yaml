@@ -1,0 +1,51 @@
+# 🔧 工具配置模板
+#
+# 将本文件复制为 tools/your-tool-name.yaml，修改参数即可。
+# LINK 启动时自动加载 tools/*.yaml，重启后生效。
+#
+# 支持的执行类型：http / command / ssh
+
+# ─── HTTP 请求（调 API、搜网页）───
+# - name: fetch_news
+#   description: 获取最新新闻
+#   execution:
+#     type: http
+#     method: GET
+#     url: "https://api.example.com/news?category={{category}}"
+#     headers:
+#       Authorization: "Bearer {{apiKey}}"
+#     timeout: 30
+#   parameters:
+#     category:
+#       type: string
+#       description: 新闻分类
+#       required: true
+
+# ─── 本机命令（执行脚本、本地操作）───
+# - name: compress_logs
+#   description: 压缩日志文件
+#   execution:
+#     type: command
+#     command: "gzip {{dir}}/*.log"
+#     workingDir: /tmp
+#     timeout: 60
+#   parameters:
+#     dir:
+#       type: string
+#       description: 日志目录
+#       default: /var/log
+
+# ─── SSH 远程执行（服务器管理）───
+# - name: check_server
+#   description: 检查远程服务器状态
+#   execution:
+#     type: ssh
+#     host: "{{host}}"
+#     username: root
+#     command: "uptime && df -h"
+#     timeout: 30
+#   parameters:
+#     host:
+#       type: string
+#       description: 服务器 IP
+#       required: true

@@ -1,0 +1,17 @@
+services:
+  link:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/link/data
+      - ./agents:/link/agents
+      - ./tools:/link/tools
+      - ./skills:/link/skills
+      - ./link.config.js:/link/link.config.js
+    environment:
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - OPENCLAW_URL=${OPENCLAW_URL:-}
+      - OPENCLAW_TOKEN=${OPENCLAW_TOKEN:-}
+    restart: unless-stopped

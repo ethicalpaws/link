@@ -1,0 +1,224 @@
+/**
+ * LINK Gateway · 房间管理器
+ *
+ * 职责：房间 CRUD + 消息持久化 + 自动截断归档。
+ * 配置均来自外部注入，不包含 LINK 实例的特定逻辑。
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+class RoomManager {
+  constructor({ dataDir, maxHistoryPerRoom, defaultActiveAgents }) {
+    this.dataDir = dataDir || path.join(process.cwd(), 'data');
+    this.roomsFile = path.join(this.dataDir, 'rooms.json');
+    this.maxHistoryPerRoom = maxHistoryPerRoom || 500;
+    this.defaultActiveAgents = defaultActiveAgents || [];
+
+    this.rooms = new Map();
+    this._ensureDataDir();
+    this._load();
+    if (this.rooms.size === 0) this.create('默认群聊');
+  }
+
+  create(name) {
+    const id = this._genId();
+    const now = new Date().toISOString();
+    const room = {
+      id, name: name || '新群聊',
+      history: [],
+      activeAgents: [...this.defaultActiveAgents],
+      summary: null,
+      createdAt: now, updatedAt: now,
+    };
+    this.rooms.set(id, room);
+    this._save();
+    return this._sanitize(room);
+  }
+
+  get(id, opts = {}) {
+    const room = this.rooms.get(id);
+    if (!room) return null;
+    const base = this._sanitize(room, true);
+    if (!opts.offset && !opts.limit) {
+      // 无分页参数 → 返回全部历史（向后兼容）
+      return base;
+    }
+    const offset = Math.max(0, parseInt(opts.offset) || 0);
+    const limit = Math.min(500, Math.max(1, parseInt(opts.limit) || 100));
+    const paginatedHistory = room.history.slice(offset, offset + limit);
+    return {
+      ...base,
+      history: paginatedHistory,
+      pagination: {
+        offset,
+        limit,
+        total: room.history.length,
+        hasMore: offset + limit < room.history.length,
+      },
+    };
+  }
+
+  getMeta(id) {
+    const room = this.rooms.get(id);
+    return room ? this._sanitize(room, false) : null;
+  }
+
+  list() {
+    return Array.from(this.rooms.values())
+      .map(r => this._sanitize(r, false))
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  }
+
+  delete(id) {
+    if (this.rooms.size <= 1) return false;
+    const ok = this.rooms.delete(id);
+    if (ok) this._save();
+    return ok;
+  }
+
+  appendHistory(id, entry) {
+    const room = this.rooms.get(id);
+    if (!room) return false;
+    room.history.push(entry);
+    room.updatedAt = new Date().toISOString();
+    this._truncateIfNeeded(room);
+    this._save();
+    return true;
+  }
+
+  removeMessage(roomId, messageId) {
+    const room = this.rooms.get(roomId);
+    if (!room) return false;
+
+    let idx = -1;
+
+    // 1. 精确匹配 id
+    idx = room.history.findIndex(m => m.id === messageId);
+
+    // 2. 前端 id `user-${timestamp}`，后端存 `${timestamp}-${random}`，提取 timestamp 比对
+    if (idx < 0) {
+      const parts = messageId.replace('user-', '').split('-');
+      const ts = parseInt(parts[0]);
+      if (!isNaN(ts)) {
+        for (let i = room.history.length - 1; i >= 0; i--) {
+          const m = room.history[i];
+          if (m.role !== 'user') continue;
+          const mParts = (m.id || '').split('-');
+          const mTs = parseInt(mParts[0]);
+          if (mTs && Math.abs(mTs - ts) < 10000) {
+            idx = i;
+            break;
+          }
+        }
+      }
+    }
+
+    // 3. 最后兜底：直接按 messageId 去掉 `user-` 前缀后匹配
+    if (idx < 0) {
+      const tsStr = messageId.replace('user-', '').split('-')[0];
+      idx = room.history.findIndex(m => {
+        if (m.role !== 'user') return false;
+        const mId = m.id || '';
+        return mId.startsWith(tsStr) || messageId.startsWith(mId.replace(/-\w+$/, ''));
+      });
+    }
+
+    if (idx < 0) return false;
+    room.history.splice(idx, 1);
+    room.updatedAt = new Date().toISOString();
+    this._save();
+    return true;
+  }
+
+  appendBatch(id, entries) {
+    const room = this.rooms.get(id);
+    if (!room) return false;
+    // 给没有 id 的消息补上唯一 id
+    const timedEntries = entries.map(e => e.id ? e : { ...e, id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}` });
+    room.history.push(...timedEntries);
+    this._truncateIfNeeded(room);
+    room.updatedAt = new Date().toISOString();
+    this._save();
+    return true;
+  }
+
+  updateActiveAgents(id, agentIds) {
+    const room = this.rooms.get(id);
+    if (!room) return false;
+    room.activeAgents = agentIds;
+    this._save();
+    return true;
+  }
+
+  _genId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  _sanitize(room, includeHistory = false) {
+    const base = {
+      id: room.id, name: room.name, summary: room.summary,
+      activeAgents: room.activeAgents,
+      createdAt: room.createdAt, updatedAt: room.updatedAt,
+      messageCount: room.history.length,
+    };
+    if (includeHistory) {
+      base.history = room.history;
+      if (room.history.length > 0) {
+        const last = room.history[room.history.length - 1];
+        base.lastMessage = {
+          role: last.role, name: last.name || null,
+          content: (last.content || '').slice(0, 80) + ((last.content || '').length > 80 ? '…' : ''),
+        };
+      }
+    }
+    return base;
+  }
+
+  _save() {
+    try {
+      if (!fs.existsSync(this.dataDir)) fs.mkdirSync(this.dataDir, { recursive: true });
+      const plain = {};
+      for (const [id, room] of this.rooms) plain[id] = room;
+      const tmp = this.roomsFile + '.tmp';
+      fs.writeFileSync(tmp, JSON.stringify(plain, null, 2), 'utf-8');
+      fs.renameSync(tmp, this.roomsFile);
+    } catch (err) {
+      console.error('✗ 保存房间失败:', err.message);
+    }
+  }
+
+  _truncateIfNeeded(room) {
+    if (room.history.length <= this.maxHistoryPerRoom) return;
+    const excess = room.history.length - this.maxHistoryPerRoom;
+    const dropped = room.history.splice(0, excess);
+    const userCount = dropped.filter(m => m.role === 'user').length;
+    const agentCounts = {};
+    dropped.filter(m => m.role === 'assistant').forEach(m => {
+      agentCounts[m.name] = (agentCounts[m.name] || 0) + 1;
+    });
+    const agentSummary = Object.entries(agentCounts)
+      .map(([name, c]) => `${name} ${c}条`).join(' ');
+    room.summary = `📜 ${dropped.length} 条已归档（用户 ${userCount} 条，${agentSummary}）`;
+  }
+
+  _ensureDataDir() {
+    if (!fs.existsSync(this.dataDir)) fs.mkdirSync(this.dataDir, { recursive: true });
+  }
+
+  _load() {
+    try {
+      if (!fs.existsSync(this.roomsFile)) return;
+      const raw = JSON.parse(fs.readFileSync(this.roomsFile, 'utf-8'));
+      for (const [id, room] of Object.entries(raw)) {
+        if (!room.history) room.history = [];
+        if (!room.activeAgents) room.activeAgents = [...this.defaultActiveAgents];
+        this.rooms.set(id, room);
+      }
+    } catch (err) {
+      console.error('✗ 加载房间失败:', err.message);
+    }
+  }
+}
+
+module.exports = { RoomManager };

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔗 LINK · 群聊</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <header>
+    <div class="title-bar">
+      <div class="title">🔗 LINK · 群聊</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="connection-status" id="connStatus"><span class="dot connecting"></span> 连接中</span>
+        <span class="room-count" id="roomCount"></span>
+      </div>
+    </div>
+    <div class="room-bar-wrap">
+      <div class="room-bar" id="roomBar"></div>
+    </div>
+    <div class="agent-bar" id="agentBar"></div>
+  </header>
+
+  <div id="chatArea"></div>
+
+  <footer>
+    <div class="quick-bar" id="quickBar"></div>
+    <div class="input-row">
+      <textarea id="msgInput" rows="1" placeholder="输入消息，@Agent名 指定回应者..."></textarea>
+      <button id="sendBtn">发送</button>
+    </div>
+  </footer>
+</div>
+
+<!-- 创建房间弹窗 -->
+<div class="modal-overlay" id="createModal">
+  <div class="modal-box">
+    <h3>新建群聊</h3>
+    <input type="text" id="roomNameInput" placeholder="输入房间名称">
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modalCancel">取消</button>
+      <button class="btn-confirm" id="modalConfirm">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- 删除确认弹窗 -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="msg" id="confirmMsg"></div>
+    <div class="confirm-actions">
+      <button class="btn-cancel" id="confirmCancel">取消</button>
+      <button class="btn-danger" id="confirmDelete">删除</button>
+    </div>
+  </div>
+</div>
+
+<script src="marked.min.js"></script>
+<script src="app.js?v=2"></script>
+</body>
+</html>

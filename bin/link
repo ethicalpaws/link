@@ -1,0 +1,163 @@
+#!/usr/bin/env node
+
+/**
+ * LINK · 启动入口
+ *
+ * 读取 link.config.js → 装配所有模块 → 启动 Gateway。
+ */
+
+const path = require('path');
+const fs = require('fs');
+
+const ROOT = path.resolve(__dirname, '..');
+
+// ─── 1. 读取配置 ───
+
+let config = {};
+const configPath = path.join(ROOT, 'link.config.js');
+if (fs.existsSync(configPath)) {
+  try {
+    config = require(configPath);
+    console.log(`✓ 已加载配置: link.config.js`);
+  } catch (err) {
+    console.error(`✗ 配置加载失败: ${err.message}`);
+    process.exit(1);
+  }
+} else {
+  console.log(`⚠ 未找到 link.config.js，使用默认配置`);
+}
+
+// ─── 2. LLM 模块 ───
+
+const llm = require('@link/llm');
+const workspaceDir = config.workspaceDir || path.join(ROOT, 'workspace');
+if (!fs.existsSync(workspaceDir)) { fs.mkdirSync(workspaceDir, { recursive: true }); }
+
+console.log('   📁 工作区: ' + workspaceDir);
+
+const llmConfigFile = path.join(ROOT, 'data', 'llm-config.json');
+if (fs.existsSync(llmConfigFile)) {
+  try {
+    const lc = JSON.parse(fs.readFileSync(llmConfigFile, 'utf-8'));
+    if (process.env.LLM_API_KEY) lc.apiKey = process.env.LLM_API_KEY;
+    llm.setProvider({ primary: { provider: lc.provider || 'openclaw', model: lc.model || '', baseUrl: lc.baseUrl, apiKey: lc.apiKey, token: lc.apiKey } });
+    console.log(`  ✓ LLM provider: ${lc.provider || 'openclaw'}`);
+  } catch (_) {}
+} else if (config.llm) {
+  if (process.env.LLM_API_KEY && config.llm.primary) config.llm.primary.token = process.env.LLM_API_KEY;
+  llm.setProvider(config.llm);
+  console.log(`  ✓ LLM provider: ${config.llm.primary?.provider || '配置中'}`);
+}
+
+// ─── 3. 记忆系统 ───
+
+const { MemoryStorage } = require('@link/memory');
+const memoryStorage = new MemoryStorage(path.join(ROOT, 'data'), {
+  identityFile: config.memory?.identityFile ?? 'core_identity.md',
+});
+
+// ─── 4. 工具注册系统 ───
+
+const { ToolRegistry, SkillRegistry, YamlLoader, scanCommunityPackages, MCPBridge } = require('@link/registry');
+const toolRegistry = new ToolRegistry();
+const skillRegistry = new SkillRegistry(toolRegistry);
+
+const toolsDir = path.join(ROOT, 'tools');
+if (fs.existsSync(toolsDir)) {
+  const loader = new YamlLoader(toolRegistry);
+  loader.loadFromDir(toolsDir);
+}
+
+// 加载内置 Skill
+const skillsDir = path.join(ROOT, 'skills');
+if (fs.existsSync(skillsDir)) {
+  const loader = new YamlLoader(toolRegistry);
+  loader.loadSkillsFromDir(skillsDir, skillRegistry);
+}
+
+scanCommunityPackages(toolRegistry, skillRegistry).catch(() => {});
+
+// MCP Server（后台连接，不阻塞服务器启动）
+const mcpBridge = new MCPBridge();
+const mcpConfigFile = path.join(ROOT, 'data', 'mcp-config.json');
+let mcpServers = [];
+if (config.mcpServers && Array.isArray(config.mcpServers)) mcpServers = config.mcpServers;
+if (fs.existsSync(mcpConfigFile)) {
+  try {
+    const mc = JSON.parse(fs.readFileSync(mcpConfigFile, 'utf-8'));
+    if (mc.servers) mcpServers = mcpServers.concat(mc.servers);
+  } catch (e) {}
+}
+if (mcpServers.length > 0) {
+  console.log(`  ⏳ MCP: ${mcpServers.length} 个 Server 待连接（后台进行，不影响启动）`);
+  (async () => {
+    for (const mcpCfg of mcpServers) {
+      try {
+        const tools = await mcpBridge.connectServer(mcpCfg);
+        for (const tool of tools) { tool._fromMcp = true; toolRegistry.register(tool); }
+        console.log(`  🤝 MCP: ${mcpCfg.name} (${tools.length} 个工具)`);
+      } catch (err) {
+        console.warn(`  ⚠ MCP: ${mcpCfg.name} 加载失败: ${err.message}`);
+      }
+    }
+  })();
+}
+
+// ─── 5. Agent 配置 ───
+
+let agents = config.agents || [];
+const agentConfigFile = path.join(ROOT, 'data', 'agents-config.json');
+if (fs.existsSync(agentConfigFile)) {
+  try {
+    const ac = JSON.parse(fs.readFileSync(agentConfigFile, 'utf-8'));
+    if (ac.agents?.length > 0) agents = ac.agents;
+  } catch (_) {}
+}
+
+const agentMap = {};
+for (const a of agents) agentMap[a.id] = a;
+const defaultActiveAgents = agents.filter(a => a.autoReply).map(a => a.id);
+
+if (agents && agents.length > 0) { agents.forEach(function(a) { var d = path.join(workspaceDir, a.id); if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); }); }
+
+// ─── 6. 启动 Gateway ───
+
+const { createServer } = require('@link/gateway');
+
+console.log(`\n🔗 LINK v0.1.0 · 帮你走得更远`);
+console.log(`   ─────────────────────────────`);
+
+const serverBundle = createServer({
+  port: config.port || process.env.PORT || 3000,
+  agents,
+  agentMap,
+  dataDir: path.join(ROOT, 'data'),
+  maxHistoryPerRoom: config.memory?.maxHistoryPerRoom || 500,
+  identityFile: config.memory?.identityFile ?? 'core_identity.md',
+  defaultActiveAgents,
+  memoryStorage,
+  toolRegistry,
+  skillRegistry,
+  toolsDir,
+  mcpBridge,
+  llmCall: (agentId, messages, tools) => llm.call(agentId, messages, tools),
+  adminAuth: config.admin,
+  knowledgeDir: config.knowledgeDir || path.join(ROOT, 'data', 'knowledge'),
+  workspaceDir,
+  staticDir: config.staticDir ? path.resolve(ROOT, config.staticDir) : undefined,
+});
+
+// 优雅关闭
+const shutdown = (signal) => {
+  console.log('\n  ↳ 收到 ' + signal + '，正在关闭...');
+  if (serverBundle.scheduler) serverBundle.scheduler.stop();
+  mcpBridge.disconnectAll().catch(() => {});
+  serverBundle.server.close(() => { console.log('  ↳ ✓ 已关闭'); process.exit(0); });
+  setTimeout(() => { console.error('  ↳ ✗ 强制退出'); process.exit(1); }, 5000);
+};
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+console.log(`   💬 聊天: http://localhost:${config.port || 3000}`);
+console.log(`   ⚙️  管理: http://localhost:${config.port || 3000}/admin`);
+console.log(``);

@@ -1,0 +1,520 @@
+/**
+ * ============================================================
+ *  聊天界面主题配置
+ * ============================================================
+ *  修改此文件即可自定义聊天界面外观，无需触碰业务代码。
+ *  所有颜色使用 CSS 变量，集中在 :root 中定义。
+ *
+ *  气泡配色：
+ *    - 用户气泡：黑金配色（自己=右侧）
+ *    - 代理气泡：灰蓝配色（对方=左侧）
+ */
+
+/* ============================================================
+ *  浅色主题 (默认)
+ * ============================================================ */
+:root {
+  /* ---- 主色调 ---- */
+  --color-primary: #c9a84c;           /* 金色 */
+  --color-primary-hover: #b8973f;
+  --color-primary-light: #fdf6e3;
+
+  /* ---- 背景色 ---- */
+  --color-bg-page: #e8e8e8;           /* 页面背景（聊天区域） */
+  --color-bg-header: #f0f0f0;         /* 头部背景 */
+  --color-bg-sidebar: #f7f7f7;        /* 侧边栏背景 */
+  --color-bg-input: #ffffff;          /* 输入框背景 */
+  --color-bg-card: #ffffff;           /* 卡片/面板背景 */
+
+  /* ---- 气泡色 ---- */
+  --color-bubble-user: #1a1a1a;       /* 用户气泡=黑 */
+  --color-bubble-user-text: #c9a84c;  /* 用户气泡内文字=金色 */
+  --color-bubble-user-hover: #2a2a2a;
+  --color-bubble-agent: #e8eef5;      /* 代理气泡=浅灰蓝 */
+  --color-bubble-agent-text: #1a1a1a;
+  --color-bubble-agent-hover: #d8e2ef;
+
+  /* ---- 文字色 ---- */
+  --color-text-primary: #1a1a1a;      /* 主文字 */
+  --color-text-secondary: #888888;    /* 次要文字/时间戳 */
+  --color-text-muted: #b3b3b3;        /* 占位符/禁用 */
+  --color-text-inverse: #ffffff;      /* 深色背景上的文字 */
+
+  /* ---- 边框色 ---- */
+  --color-border: #d8d8d8;
+  --color-border-light: #e8e8e8;
+
+  /* ---- 功能色 ---- */
+  --color-danger: #dc3545;
+  --color-warning: #f0a500;
+  --color-info: #4a9eff;
+  --color-success: #28a745;
+
+  /* ---- 阴影 ---- */
+  --shadow-bubble-user: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-bubble-agent: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* ---- 间距 ---- */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+
+  /* ---- 圆角 ---- */
+  --radius-bubble: 16px;
+  --radius-card: 12px;
+  --radius-button: 6px;
+  --radius-avatar: 50%;
+
+  /* ---- 头像尺寸 ---- */
+  --size-avatar: 42px;
+  --size-avatar-small: 32px;
+
+  /* ---- 字体 ---- */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-base: 15px;
+  --font-size-lg: 17px;
+
+  /* ---- 过渡 ---- */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+
+  /* ---- Z-Index 层级 ---- */
+  --z-dropdown: 100;
+  --z-modal-backdrop: 200;
+  --z-modal: 210;
+  --z-toast: 300;
+}
+
+/* ============================================================
+ *  深色主题
+ * ============================================================ */
+[data-theme="dark"] {
+  --color-primary: #c9a84c;
+  --color-primary-hover: #d4b05a;
+  --color-primary-light: #2a2518;
+
+  --color-bg-page: #1a1a1a;
+  --color-bg-header: #222222;
+  --color-bg-sidebar: #1e1e1e;
+  --color-bg-input: #2a2a2a;
+  --color-bg-card: #2a2a2a;
+
+  --color-bubble-user: #2d2d2d;
+  --color-bubble-user-text: #c9a84c;
+  --color-bubble-user-hover: #3a3a3a;
+  --color-bubble-agent: #3a4556;
+  --color-bubble-agent-text: #e8e8e8;
+  --color-bubble-agent-hover: #45567a;
+
+  --color-text-primary: #e8e8e8;
+  --color-text-secondary: #888888;
+  --color-text-muted: #555555;
+  --color-text-inverse: #1a1a1a;
+
+  --color-border: #3d3d3d;
+  --color-border-light: #2d2d2d;
+
+  --color-danger: #dc3545;
+  --color-warning: #f0a500;
+  --color-info: #4a9eff;
+  --color-success: #28a745;
+
+  --shadow-bubble-user: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-bubble-agent: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+ *  夜间护眼主题（深灰+金）
+ * ============================================================ */
+[data-theme="midnight"] {
+  --color-primary: #c9a84c;
+  --color-primary-hover: #d4b05a;
+  --color-primary-light: #1a1810;
+
+  --color-bg-page: #121212;
+  --color-bg-header: #1a1a1a;
+  --color-bg-sidebar: #0f0f0f;
+  --color-bg-input: #1e1e1e;
+  --color-bg-card: #1e1e1e;
+
+  --color-bubble-user: #1f1f1f;
+  --color-bubble-user-text: #c9a84c;
+  --color-bubble-user-hover: #2a2a2a;
+  --color-bubble-agent: #2a3545;
+  --color-bubble-agent-text: #d0d8e4;
+  --color-bubble-agent-hover: #354559;
+
+  --color-text-primary: #d4d4d4;
+  --color-text-secondary: #808080;
+  --color-text-muted: #505050;
+  --color-text-inverse: #0f0f0f;
+
+  --color-border: #2a2a2a;
+  --color-border-light: #1e1e1e;
+
+  --color-danger: #e05a5a;
+  --color-warning: #c9a84c;
+  --color-info: #5a9eff;
+  --color-success: #5aaa6a;
+
+  --shadow-bubble-user: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-bubble-agent: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+ *  雾霾蓝主题
+ * ============================================================ */
+[data-theme="smoky-blue"] {
+  --color-primary: #4a9eff;
+  --color-primary-hover: #3a8eef;
+  --color-primary-light: #e8f2ff;
+
+  --color-bg-page: #e5e9f0;
+  --color-bg-header: #d8dfe9;
+  --color-bg-sidebar: #d0d9e4;
+  --color-bg-input: #ffffff;
+  --color-bg-card: #ffffff;
+
+  --color-bubble-user: #1a2a3a;
+  --color-bubble-user-text: #ffd700;
+  --color-bubble-user-hover: #2a3a4a;
+  --color-bubble-agent: #d0d9e4;
+  --color-bubble-agent-text: #1a2a3a;
+  --color-bubble-agent-hover: #c0c9d4;
+
+  --color-text-primary: #1a2a3a;
+  --color-text-secondary: #6b7c8d;
+  --color-text-muted: #9aabb8;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #c0c9d4;
+  --color-border-light: #d8dfe9;
+
+  --color-danger: #dc3545;
+  --color-warning: #f0a500;
+  --color-info: #4a9eff;
+  --color-success: #28a745;
+
+  --shadow-bubble-user: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-bubble-agent: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+ *  薄荷绿主题
+ * ============================================================ */
+[data-theme="mint"] {
+  --color-primary: #10b981;
+  --color-primary-hover: #0ea471;
+  --color-primary-light: #d1fae5;
+
+  --color-bg-page: #f0fdf4;
+  --color-bg-header: #e6f7ed;
+  --color-bg-sidebar: #dcfce7;
+  --color-bg-input: #ffffff;
+  --color-bg-card: #ffffff;
+
+  --color-bubble-user: #064e3b;
+  --color-bubble-user-text: #fbbf24;
+  --color-bubble-user-hover: #0a5742;
+  --color-bubble-agent: #d1fae5;
+  --color-bubble-agent-text: #064e3b;
+  --color-bubble-agent-hover: #c0f0d8;
+
+  --color-text-primary: #064e3b;
+  --color-text-secondary: #6b7c8d;
+  --color-text-muted: #9aabb8;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #a7f3d0;
+  --color-border-light: #d1fae5;
+
+  --color-danger: #dc3545;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-success: #10b981;
+
+  --shadow-bubble-user: 0 2px 8px rgba(6, 78, 59, 0.25);
+  --shadow-bubble-agent: 0 1px 3px rgba(6, 78, 59, 0.1);
+  --shadow-card: 0 2px 8px rgba(6, 78, 59, 0.1);
+}
+
+/* ============================================================
+ *  玫瑰红主题
+ * ============================================================ */
+[data-theme="rose"] {
+  --color-primary: #f43f5e;
+  --color-primary-hover: #e11d48;
+  --color-primary-light: #ffe4e6;
+
+  --color-bg-page: #fdf2f4;
+  --color-bg-header: #fce7ea;
+  --color-bg-sidebar: #f9d5da;
+  --color-bg-input: #ffffff;
+  --color-bg-card: #ffffff;
+
+  --color-bubble-user: #881337;
+  --color-bubble-user-text: #fcd34d;
+  --color-bubble-user-hover: #99124a;
+  --color-bubble-agent: #fce7ea;
+  --color-bubble-agent-text: #881337;
+  --color-bubble-agent-hover: #f9d5da;
+
+  --color-text-primary: #881337;
+  --color-text-secondary: #9f5a67;
+  --color-text-muted: #c0858f;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #fda4af;
+  --color-border-light: #fce7ea;
+
+  --color-danger: #dc2626;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-success: #10b981;
+
+  --shadow-bubble-user: 0 2px 8px rgba(136, 19, 55, 0.25);
+  --shadow-bubble-agent: 0 1px 3px rgba(136, 19, 55, 0.1);
+  --shadow-card: 0 2px 8px rgba(136, 19, 55, 0.1);
+}
+
+/* ============================================================
+ *  琥珀橙主题
+ * ============================================================ */
+[data-theme="amber"] {
+  --color-primary: #f59e0b;
+  --color-primary-hover: #d97706;
+  --color-primary-light: #fef3c7;
+
+  --color-bg-page: #fffbeb;
+  --color-bg-header: #fef3c7;
+  --color-bg-sidebar: #fde68a;
+  --color-bg-input: #ffffff;
+  --color-bg-card: #ffffff;
+
+  --color-bubble-user: #78350f;
+  --color-bubble-user-text: #fcd34d;
+  --color-bubble-user-hover: #92400e;
+  --color-bubble-agent: #fef3c7;
+  --color-bubble-agent-text: #78350f;
+  --color-bubble-agent-hover: #fde68a;
+
+  --color-text-primary: #78350f;
+  --color-text-secondary: #a16207;
+  --color-text-muted: #ca8a04;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #fcd34d;
+  --color-border-light: #fef3c7;
+
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-success: #22c55e;
+
+  --shadow-bubble-user: 0 2px 8px rgba(120, 53, 15, 0.25);
+  --shadow-bubble-agent: 0 1px 3px rgba(120, 53, 15, 0.1);
+  --shadow-card: 0 2px 8px rgba(120, 53, 15, 0.1);
+}
+
+/* ============================================================
+ *  薰衣草紫主题
+ * ============================================================ */
+[data-theme="lavender"] {
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-primary-light: #ede9fe;
+
+  --color-bg-page: #f5f3ff;
+  --color-bg-header: #ede9fe;
+  --color-bg-sidebar: #ddd6fe;
+  --color-bg-input: #ffffff;
+  --color-bg-card: #ffffff;
+
+  --color-bubble-user: #4c1d95;
+  --color-bubble-user-text: #c4b5fd;
+  --color-bubble-user-hover: #5b21b6;
+  --color-bubble-agent: #ede9fe;
+  --color-bubble-agent-text: #4c1d95;
+  --color-bubble-agent-hover: #ddd6fe;
+
+  --color-text-primary: #4c1d95;
+  --color-text-secondary: #7c3aed;
+  --color-text-muted: #a78bfa;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #c4b5fd;
+  --color-border-light: #ede9fe;
+
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-success: #22c55e;
+
+  --shadow-bubble-user: 0 2px 8px rgba(76, 29, 149, 0.25);
+  --shadow-bubble-agent: 0 1px 3px rgba(76, 29, 149, 0.1);
+  --shadow-card: 0 2px 8px rgba(76, 29, 149, 0.1);
+}
+
+/* ============================================================
+ *  冰川蓝主题（Mac 风格）
+ * ============================================================ */
+[data-theme="glacier"] {
+  --color-primary: #007aff;
+  --color-primary-hover: #0066dd;
+  --color-primary-light: #e5f0ff;
+
+  --color-bg-page: #ffffff;
+  --color-bg-header: #f5f5f7;
+  --color-bg-sidebar: #f0f0f2;
+  --color-bg-input: #ffffff;
+  --color-bg-card: #ffffff;
+
+  --color-bubble-user: #1d1d1f;
+  --color-bubble-user-text: #ffd60a;
+  --color-bubble-user-hover: #2d2d2f;
+  --color-bubble-agent: #e8e8ed;
+  --color-bubble-agent-text: #1d1d1f;
+  --color-bubble-agent-hover: #d8d8dd;
+
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #6e6e73;
+  --color-text-muted: #aeaeb2;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #d2d2d7;
+  --color-border-light: #e8e8ed;
+
+  --color-danger: #ff3b30;
+  --color-warning: #ff9f0a;
+  --color-info: #007aff;
+  --color-success: #34c759;
+
+  --shadow-bubble-user: 0 2px 12px rgba(0, 0, 0, 0.15);
+  --shadow-bubble-agent: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+ *  巧克力棕主题
+ * ============================================================ */
+[data-theme="chocolate"] {
+  --color-primary: #c9a84c;
+  --color-primary-hover: #b8973f;
+  --color-primary-light: #3d2a1a;
+
+  --color-bg-page: #2d1f14;
+  --color-bg-header: #3d2a1a;
+  --color-bg-sidebar: #251a10;
+  --color-bg-input: #3d2a1a;
+  --color-bg-card: #3d2a1a;
+
+  --color-bubble-user: #1a0f08;
+  --color-bubble-user-text: #e8c86e;
+  --color-bubble-user-hover: #2a1a10;
+  --color-bubble-agent: #4a3525;
+  --color-bubble-agent-text: #f0e0c8;
+  --color-bubble-agent-hover: #5a4535;
+
+  --color-text-primary: #f0e0c8;
+  --color-text-secondary: #a08060;
+  --color-text-muted: #6a5040;
+  --color-text-inverse: #1a0f08;
+
+  --color-border: #5a4030;
+  --color-border-light: #4a3525;
+
+  --color-danger: #dc3545;
+  --color-warning: #f0a500;
+  --color-info: #5a9eff;
+  --color-success: #c9a84c;
+
+  --shadow-bubble-user: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-bubble-agent: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+ *  极简纯白主题
+ * ============================================================ */
+[data-theme="clean"] {
+  --color-primary: #1a1a1a;
+  --color-primary-hover: #333333;
+  --color-primary-light: #f5f5f5;
+
+  --color-bg-page: #ffffff;
+  --color-bg-header: #ffffff;
+  --color-bg-sidebar: #fafafa;
+  --color-bg-input: #ffffff;
+  --color-bg-card: #ffffff;
+
+  --color-bubble-user: #1a1a1a;
+  --color-bubble-user-text: #ffffff;
+  --color-bubble-user-hover: #333333;
+  --color-bubble-agent: #f5f5f5;
+  --color-bubble-agent-text: #1a1a1a;
+  --color-bubble-agent-hover: #ebebeb;
+
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #e0e0e0;
+  --color-border-light: #f0f0f0;
+
+  --color-danger: #dc3545;
+  --color-warning: #f0a500;
+  --color-info: #0066cc;
+  --color-success: #28a745;
+
+  --shadow-bubble-user: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-bubble-agent: none;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================================
+ *  赛博朋克主题
+ * ============================================================ */
+[data-theme="cyber"] {
+  --color-primary: #00ff88;
+  --color-primary-hover: #00dd77;
+  --color-primary-light: #003322;
+
+  --color-bg-page: #0a0a0f;
+  --color-bg-header: #12121a;
+  --color-bg-sidebar: #0d0d14;
+  --color-bg-input: #1a1a25;
+  --color-bg-card: #1a1a25;
+
+  --color-bubble-user: #00ff88;
+  --color-bubble-user-text: #0a0a0f;
+  --color-bubble-user-hover: #00dd77;
+  --color-bubble-agent: #1a1a25;
+  --color-bubble-agent-text: #00ffcc;
+  --color-bubble-agent-hover: #252535;
+
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #00ff88;
+  --color-text-muted: #555555;
+  --color-text-inverse: #0a0a0f;
+
+  --color-border: #00ff88;
+  --color-border-light: #1a1a25;
+
+  --color-danger: #ff0055;
+  --color-warning: #ffaa00;
+  --color-info: #00ccff;
+  --color-success: #00ff88;
+
+  --shadow-bubble-user: 0 0 15px rgba(0, 255, 136, 0.3);
+  --shadow-bubble-agent: 0 0 10px rgba(0, 255, 200, 0.15);
+  --shadow-card: 0 0 15px rgba(0, 255, 136, 0.1);
+}

@@ -1,0 +1,11 @@
+name: daily_news
+description: 知识日报 — 搜索知识库最新笔记，汇总生成日报
+steps:
+  - tool: search_knowledge
+    name: search
+    params:
+      query: "{{topic}}"
+  - tool: write_file
+    params:
+      path: "./notes/daily-{{date}}.md"
+      content: "# 日报: {{topic}}\n\n{{steps.search.result}}"

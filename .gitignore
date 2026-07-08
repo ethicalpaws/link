@@ -1,0 +1,10 @@
+node_modules/
+data/llm-config.json
+data/agents-config.json
+data/rooms.json
+data/daily-summary/
+data/digest/
+agents/*/USER.md        # 用户数据，不公开
+.DS_Store
+*.log
+data/schedules-config.json

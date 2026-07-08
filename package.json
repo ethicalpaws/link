@@ -1,0 +1,31 @@
+{
+  "name": "link",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LINK — Long-term Intelligent Navigation Keystone",
+  "scripts": {
+    "start": "node bin/link",
+    "create": "node packages/create-link-app/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "workspaces": [
+    "packages/llm",
+    "packages/memory",
+    "packages/gateway",
+    "packages/registry",
+    "packages/knowledge",
+    "packages/create-link-app",
+    "packages/admin-ui"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.9"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  }
+}

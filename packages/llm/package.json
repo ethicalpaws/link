@@ -1,0 +1,7 @@
+{
+  "name": "@link/llm",
+  "version": "0.1.0",
+  "description": "LINK LLM adapter - call/stream/healthCheck/circuit breaker",
+  "main": "index.js",
+  "license": "MIT"
+}
